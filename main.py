@@ -39,10 +39,8 @@ class AccessChecker(threading.Thread):
                 requests.get('https://api.telegram.org/[bot_token]/sendMessage?chat_id=[chat_id]&text='+user_remark+'%20locked')
                 disableAccount(user_port=user_port)
                 print("inbound with port " + str(user_port) + " blocked")
-                
             else:
-                print("no target !!");
-                time.sleep(1)
+                time.sleep(2)
 
 
 users_list = getUsers();
