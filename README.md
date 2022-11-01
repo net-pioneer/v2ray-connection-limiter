@@ -5,6 +5,7 @@ It's simple part i could do for the ppl who providing VPN for iranian users so t
 
 so i made something for VLESS and other protocols (vmess seems blocked in iran) which you can detect those accounts which using by more than 1 IP ! this script might has some bugs and it's possible to get more power from CPU SERVER .! so check everything first and put it on background
 
+<b>Note: </b>
 you can change Limits in line 8 >> _max_allowed_connections = 1 (1 means only one device could able to connect but i suggest to set it on 3 it works great then, becuase sometimes switching between mobileData and ADSL gonna make some issues so num 3 is better .)
 
 note : at this time script doesn't update new users right now . i gonna make it happen.
