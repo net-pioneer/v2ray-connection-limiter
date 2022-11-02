@@ -9,7 +9,7 @@ so i made something for VLESS and other protocols (vmess seems blocked in iran) 
 1 - install python .<br>
 2 - pip3 install requests<br>
 3 - install netstat (if your server doesn't have it so install it - debian : apt install net-tools)<br>
-4 - put it on background => nohup python3 main.py &<br>
+4 - put it on background => nohup python3 main.py &  (without background process : python3 main.py) <br>
 5 - you can set telegram bot token + your tlg chat_id for notification as well . it's pretty clear on the code .
 <br>
 <b><h4>Note: </h4></b><br>
