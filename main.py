@@ -20,8 +20,9 @@ def disableAccount(user_port):
     conn.execute("update inbounds set enable = 0 where port="+str(user_port));
     conn.commit()
     conn.close();
-    time.sleep(3)
+    time.sleep(2)
     os.popen("x-ui restart")
+    time.sleep(3)
     
 class AccessChecker(threading.Thread):
     def __init__(self, user):
