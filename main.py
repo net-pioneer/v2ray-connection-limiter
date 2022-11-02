@@ -1,17 +1,22 @@
+from glob import glob
 import os;
 import sqlite3;
 import time;
 import requests;
 import subprocess;
 import threading;
+import schedule;
 _db_address = '/etc/x-ui/x-ui.db'
 _max_allowed_connections = 1
+_user_last_id = 0;
 def getUsers():
+    global _user_last_id
     conn = sqlite3.connect(_db_address)
-    cursor = conn.execute("select remark,port from inbounds");
+    cursor = conn.execute("select id,remark,port from inbounds where id > "+str(_user_last_id));
     users_list = [];
     for c in cursor:
-        users_list.append({'name':c[0],'port':c[1]})
+        users_list.append({'name':c[1],'port':c[2]})
+        _user_last_id = c[0];
     conn.close();
     return users_list
 
@@ -24,14 +29,29 @@ def disableAccount(user_port):
     os.popen("x-ui restart")
     time.sleep(3)
     
+def checkNewUsers():
+    conn = sqlite3.connect(_db_address)
+    cursor = conn.execute("select count(*) from inbounds WHERE id > "+str(_user_last_id));
+    new_counts = cursor.fetchone()[0];
+    if new_counts > 0:
+        init()
+
+def init():
+    users_list = getUsers();
+    print(users_list)
+    for user in users_list:
+        thread = AccessChecker(user)
+        thread.start()
+        print("checking : " + user['name'])
 class AccessChecker(threading.Thread):
     def __init__(self, user):
         threading.Thread.__init__(self)
         self.user = user;
     def run(self):
+        #global _max_allowed_connections;
+        user_remark = self.user['name'];
+        user_port = self.user['port'];
         while True:
-            user_remark = self.user['name'];
-            user_port = self.user['port'];
             netstate_data =  os.popen("netstat -np 2>/dev/null | grep :"+str(user_port)+" | awk '{if($3!=0) print $5;}' | cut -d: -f1 | sort | uniq -c | sort -nr | head").read();
             netstate_data = str(netstate_data)
             connection_count =  len(netstate_data.split("\n")) - 1;
@@ -43,8 +63,8 @@ class AccessChecker(threading.Thread):
             else:
                 time.sleep(2)
 
-
-users_list = getUsers();
-for user in users_list:
-    thread = AccessChecker(user)
-    thread.start()
+init();
+schedule.every(10).minutes.do(checkNewUsers)
+while True:
+    schedule.run_pending()
+    time.sleep(1)
