@@ -12,6 +12,6 @@ you can change Limits in line 8 >> _max_allowed_connections = 1 (1 means only on
 
 tested on this V2ray: https://seakfind.github.io/2021/10/10/X-UI/
 
-<b>Donate</b>
+<b>Donate:</b><br>
 Good news ! If you enjoyed this script you could donate me by donating USDT to my wallet ! A Coffee or etc.
 USDT wallet Address (TRC20) : TBFJ3YirXc7vwwuRNeqhcBcQziB3h9bPbs
