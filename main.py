@@ -38,7 +38,6 @@ def checkNewUsers():
 
 def init():
     users_list = getUsers();
-    print(users_list)
     for user in users_list:
         thread = AccessChecker(user)
         thread.start()
