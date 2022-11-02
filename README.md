@@ -6,6 +6,10 @@ It's simple part i could do for the ppl who providing VPN for iranian users so t
 
 so i made something for VLESS and other protocols (vmess seems blocked in iran) which you can detect those accounts which using by more than 1 IP ! this script might has some bugs and it's possible to get more power from CPU SERVER .! so check everything first and put it on background
 
+how it works ? 
+it's finding connected IPs to user's Port and if more than specific IPs are connected , it will disable that account . 
+it counts those Ips which connecting and downloading data in same time so it doesn't count standbyed and disconnected connections
+
 <b>Install Guide :</b><br>
 1 - install python .<br>
 2 - pip3 install requests and pip3 install schedule<br>
