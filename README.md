@@ -1,5 +1,5 @@
 v2ray-connection-limiter <br><br>
-(v2 updated)
+(v2 updated)<br>
 with this script you can detect and ban those V2ray accounts which aren't only connected to one devices.
 
 It's simple part i could do for the ppl who providing VPN for iranian users so they could selling VPN for more and more users. so 50 50 WIN WIN ! VPN providers getting money to get more Servers and many users Could get VPN as well lol. we should be togheder right ?
