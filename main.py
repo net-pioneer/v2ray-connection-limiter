@@ -47,7 +47,7 @@ class AccessChecker(threading.Thread):
         threading.Thread.__init__(self)
         self.user = user;
     def run(self):
-        #global _max_allowed_connections;
+        #global _max_allowed_connections; <<if you get variable error uncomment this.
         user_remark = self.user['name'];
         user_port = self.user['port'];
         while True:
@@ -67,3 +67,4 @@ schedule.every(10).minutes.do(checkNewUsers)
 while True:
     schedule.run_pending()
     time.sleep(1)
+    
