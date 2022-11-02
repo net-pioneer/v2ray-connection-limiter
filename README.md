@@ -5,6 +5,12 @@ It's simple part i could do for the ppl who providing VPN for iranian users so t
 
 so i made something for VLESS and other protocols (vmess seems blocked in iran) which you can detect those accounts which using by more than 1 IP ! this script might has some bugs and it's possible to get more power from CPU SERVER .! so check everything first and put it on background
 
+<b>Install Guide :</b>
+1 - install python .
+2 - pip3 install requests
+3 - install netstat (if your server doesn't have it so install it - debian : apt install net-tools)
+4 - put it on background => nohup python3 main.py &
+
 <b><h4>Note: </h4></b><br>
 you can change Limits in line 8 >> _max_allowed_connections = 1 (1 means only one device could able to connect but i suggest to set it on 3 it works great then, becuase sometimes switching between mobileData and ADSL gonna make some issues so num 3 is better .)
 
