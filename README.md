@@ -20,7 +20,7 @@ it counts those Ips which connecting and downloading data in same time so it doe
 <b><h4>Note: </h4></b><br>
 you can change Limits in line 8 >> _max_allowed_connections = 1 (1 means only one device could able to connect but i suggest to set it on 3 it works great then, becuase sometimes switching between mobileData and ADSL gonna make some issues so num 3 is better .)
 
-<b>Note: </b> : in v2 new users will check automaticlly !
+<b>Note: </b> : in v2 new users will checked automatically
 
 tested on this V2ray: https://seakfind.github.io/2021/10/10/X-UI/
 
