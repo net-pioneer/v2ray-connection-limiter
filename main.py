@@ -33,6 +33,7 @@ def checkNewUsers():
     conn = sqlite3.connect(_db_address)
     cursor = conn.execute("select count(*) from inbounds WHERE id > "+str(_user_last_id));
     new_counts = cursor.fetchone()[0];
+    conn.close();
     if new_counts > 0:
         init()
 
@@ -41,7 +42,7 @@ def init():
     for user in users_list:
         thread = AccessChecker(user)
         thread.start()
-        print("checking : " + user['name'])
+        print("starting checker for : " + user['name'])
 class AccessChecker(threading.Thread):
     def __init__(self, user):
         threading.Thread.__init__(self)
