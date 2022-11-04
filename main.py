@@ -57,7 +57,7 @@ class AccessChecker(threading.Thread):
             connection_count =  len(netstate_data.split("\n")) - 1;
             #print("c "+str(user_port) + "-"+ str(connection_count))
             if connection_count > _max_allowed_connections:
-                requests.get('https://api.telegram.org/[bot_token]/sendMessage?chat_id=[chat_id]&text='+user_remark+'%20locked')
+                requests.get('https://api.telegram.org/bot[bot_token]/sendMessage?chat_id=[chat_id]&text='+user_remark+'%20locked')
                 disableAccount(user_port=user_port)
                 print("inbound with port " + str(user_port) + " blocked")
             else:
