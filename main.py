@@ -56,6 +56,7 @@ class AccessChecker(threading.Thread):
         self.max_allowed_connections = args.max_allowed_connections
         self.telegram_bot_token = args.telegram_bot_token
         self.telegram_channel_id = args.telegram_channel_id
+        self.db_address = args.db_address
         self.max_connections = dict()
 
     def run(self):
@@ -68,6 +69,7 @@ class AccessChecker(threading.Thread):
             netstate_data = str(netstate_data)
             connection_count =  len(netstate_data.split("\n")) - 1
             if connection_count > self.max_allowed_connections:
+                disableAccount(user_port, self.db_address)
                 if not user_remark in self.max_connections.keys() or connection_count > self.max_connections[user_remark]:
                     self.max_connections[user_remark] = connection_count
                     logger.info(f"inbound {user_remark} with port {user_port} and {connection_count} connections was blocked!")
