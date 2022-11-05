@@ -8,11 +8,13 @@ import threading;
 import schedule;
 _db_address = '/etc/x-ui/x-ui.db'
 _max_allowed_connections = 1
-_user_last_id = 0;
+_user_last_id = 0
+_telegrambot_token = ''
+_telegram_chat_id = '' # you can get this in @cid_bot bot.
 def getUsers():
     global _user_last_id
     conn = sqlite3.connect(_db_address)
-    cursor = conn.execute("select id,remark,port from inbounds where id > "+str(_user_last_id));
+    cursor = conn.execute(f"select id,remark,port from inbounds where id > {_user_last_id}");
     users_list = [];
     for c in cursor:
         users_list.append({'name':c[1],'port':c[2]})
@@ -22,7 +24,7 @@ def getUsers():
 
 def disableAccount(user_port):
     conn = sqlite3.connect(_db_address) 
-    conn.execute("update inbounds set enable = 0 where port="+str(user_port));
+    conn.execute(f"update inbounds set enable = 0 where port={user_port}");
     conn.commit()
     conn.close();
     time.sleep(2)
@@ -31,7 +33,7 @@ def disableAccount(user_port):
     
 def checkNewUsers():
     conn = sqlite3.connect(_db_address)
-    cursor = conn.execute("select count(*) from inbounds WHERE id > "+str(_user_last_id));
+    cursor = conn.execute(f"select count(*) from inbounds WHERE id > {_user_last_id}");
     new_counts = cursor.fetchone()[0];
     conn.close();
     if new_counts > 0:
@@ -57,9 +59,9 @@ class AccessChecker(threading.Thread):
             connection_count =  len(netstate_data.split("\n")) - 1;
             #print("c "+str(user_port) + "-"+ str(connection_count))
             if connection_count > _max_allowed_connections:
-                requests.get('https://api.telegram.org/[bot_token]/sendMessage?chat_id=[chat_id]&text='+user_remark+'%20locked')
+                requests.get(f'https://api.telegram.org/bot{_telegrambot_token}/sendMessage?chat_id={_telegram_chat_id}&text={user_remark}%20locked')
                 disableAccount(user_port=user_port)
-                print("inbound with port " + str(user_port) + " blocked")
+                print(f"inbound with port {user_port} blocked")
             else:
                 time.sleep(2)
 
@@ -68,4 +70,3 @@ schedule.every(10).minutes.do(checkNewUsers)
 while True:
     schedule.run_pending()
     time.sleep(1)
-    
