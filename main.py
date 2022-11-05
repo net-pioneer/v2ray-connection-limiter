@@ -15,7 +15,10 @@ formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(messag
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 
-def getUsers(db_address, user_last_id):
+user_last_id = 0
+
+def getUsers(db_address):
+    global user_last_id
     conn = sqlite3.connect(db_address)
     cursor = conn.execute(f"select id,remark,port from inbounds where id > {user_last_id}")
     users_list = list()
@@ -34,7 +37,7 @@ def disableAccount(user_port, db_address):
     os.popen("x-ui restart")
     time.sleep(3)
     
-def checkNewUsers(db_address, user_last_id):
+def checkNewUsers(db_address):
     conn = sqlite3.connect(db_address)
     cursor = conn.execute(f"select count(*) from inbounds WHERE id > {user_last_id}")
     new_counts = cursor.fetchone()[0]
@@ -43,7 +46,7 @@ def checkNewUsers(db_address, user_last_id):
         init(args)
 
 def init(args):
-    for user in getUsers(args.db_address, args.user_last_id):
+    for user in getUsers(args.db_address):
         thread = AccessChecker(user, args)
         thread.start()
         logger.info(f"starting checker for : {user['name']}")
@@ -94,12 +97,11 @@ if __name__ == "__main__":
     parser.add_argument('--check-interval', type=int, default=10, help='')
     parser.add_argument('--telegram-bot-token', type=str, default=None, help='')
     parser.add_argument('--telegram-channel-id', type=str, default=None, help='')
-    parser.add_argument('--user-last-id', type=int, default=0, help='')
    
     args = parser.parse_args()
 
     init(args)
-    schedule.every(args.check_interval).minutes.do(checkNewUsers, args.db_address, args.user_last_id)
+    schedule.every(args.check_interval).minutes.do(checkNewUsers, args.db_address)
     while True:
         schedule.run_pending()
         time.sleep(1)
