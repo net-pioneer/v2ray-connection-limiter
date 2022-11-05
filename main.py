@@ -87,10 +87,11 @@ class AccessChecker(threading.Thread):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(fromfile_prefix_chars='@', description="")
+    parser = argparse.ArgumentParser(description="Arguments")
 
     parser.add_argument('--db-address', default='/etc/x-ui/x-ui.db', help='')
     parser.add_argument('--max-allowed-connections', type=int, default=1, help='')
+    parser.add_argument('--check-interval', type=int, default=10, help='')
     parser.add_argument('--telegram-bot-token', type=str, default=None, help='')
     parser.add_argument('--telegram-channel-id', type=str, default=None, help='')
     parser.add_argument('--user-last-id', type=int, default=0, help='')
@@ -98,7 +99,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     init(args)
-    schedule.every(10).minutes.do(checkNewUsers, args.db_address, args.user_last_id)
+    schedule.every(args.check_interval).minutes.do(checkNewUsers, args.db_address, args.user_last_id)
     while True:
         schedule.run_pending()
         time.sleep(1)
