@@ -60,7 +60,6 @@ class AccessChecker(threading.Thread):
         self.telegram_bot_token = args.telegram_bot_token
         self.telegram_channel_id = args.telegram_channel_id
         self.db_address = args.db_address
-        self.max_connections = dict()
 
     def run(self):
         user_remark = self.user['name']
@@ -73,17 +72,16 @@ class AccessChecker(threading.Thread):
             connection_count =  len(netstate_data.split("\n")) - 1
             if connection_count > self.max_allowed_connections:
                 disableAccount(user_port, self.db_address)
-                if not user_remark in self.max_connections.keys() or connection_count > self.max_connections[user_remark]:
-                    self.max_connections[user_remark] = connection_count
-                    logger.info(f"inbound {user_remark} with port {user_port} and {connection_count} connections was blocked!")
-                    if self.telegram_channel_id is not None and self.telegram_bot_token is not None:
-                        msg = 'https://api.telegram.org/bot'
-                        msg += self.telegram_bot_token
-                        msg += '/sendMessage?chat_id='
-                        msg += self.telegram_channel_id
-                        msg += '&text='
-                        msg += f'{user_remark} has {connection_count} connections and will be locked'.replace(' ', '%20')
-                        requests.get(msg)
+                self.max_connections[user_remark] = connection_count
+                logger.info(f"inbound {user_remark} with port {user_port} and {connection_count} connections was blocked!")
+                if self.telegram_channel_id is not None and self.telegram_bot_token is not None:
+                    msg = 'https://api.telegram.org/bot'
+                    msg += self.telegram_bot_token
+                    msg += '/sendMessage?chat_id='
+                    msg += self.telegram_channel_id
+                    msg += '&text='
+                    msg += f'{user_remark} has {connection_count} connections and will be locked'.replace(' ', '%20')
+                    requests.get(msg)
             else:
                 time.sleep(2)
 
