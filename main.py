@@ -73,7 +73,6 @@ class AccessChecker(threading.Thread):
             connection_count =  len(netstate_data.split("\n")) - 1
             if connection_count > self.max_allowed_connections:
                 disableAccount(user_port, self.db_address)
-                self.max_connections[user_remark] = connection_count
                 logger.info(f"inbound {user_remark} with port {user_port} and {connection_count} connections was blocked!")
                 if self.telegram_channel_id is not None and self.telegram_bot_token is not None:
                     msg = 'https://api.telegram.org/bot'
