@@ -60,6 +60,7 @@ class AccessChecker(threading.Thread):
         self.telegram_bot_token = args.telegram_bot_token
         self.telegram_channel_id = args.telegram_channel_id
         self.db_address = args.db_address
+        self.user_check_interval = args.user_check_interval
 
     def run(self):
         user_remark = self.user['name']
@@ -83,23 +84,24 @@ class AccessChecker(threading.Thread):
                     msg += f'{user_remark} has {connection_count} connections and will be locked'.replace(' ', '%20')
                     requests.get(msg)
             else:
-                time.sleep(2)
+                time.sleep(self.user_check_interval)
 
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Arguments")
 
-    parser.add_argument('--db-address', default='/etc/x-ui/x-ui.db', help='')
-    parser.add_argument('--max-allowed-connections', type=int, default=1, help='')
-    parser.add_argument('--check-interval', type=int, default=10, help='')
-    parser.add_argument('--telegram-bot-token', type=str, default=None, help='')
-    parser.add_argument('--telegram-channel-id', type=str, default=None, help='')
+    parser.add_argument('--db-address', default='/etc/x-ui/x-ui.db', help='database path')
+    parser.add_argument('--max-allowed-connections', type=int, default=1, help='maximum allowed connection')
+    parser.add_argument('--newuser-check-interval', type=int, default=60, help='minutes')
+    parser.add_argument('--user-check-interval', type=int, default=60, help='seconds')
+    parser.add_argument('--telegram-bot-token', type=str, default=None, help='telegram bot token')
+    parser.add_argument('--telegram-channel-id', type=str, default=None, help='telegram channel id: has to be a public channel')
    
     args = parser.parse_args()
 
     init(args)
-    schedule.every(args.check_interval).minutes.do(checkNewUsers, args.db_address)
+    schedule.every(args.newuser_check_interval).minutes.do(checkNewUsers, args.db_address)
     while True:
         schedule.run_pending()
         time.sleep(1)
